@@ -1,6 +1,5 @@
 package com.example.SprintPractice1.service;
 
-
 import com.example.SprintPractice1.dto.AccountDTO;
 import com.example.SprintPractice1.entities.Account;
 
@@ -16,3 +15,4 @@ public interface AccountService {
 
     void deleteAccount(Long id);
 }
+

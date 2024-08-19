@@ -23,8 +23,18 @@ public class JwtUtil {
     public String generateToken(Account account) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", account.getId());
+        claims.put("username", account.getUsername());
         claims.put("email", account.getEmail());
-        claims.put("accountType", account.getAccountType());
+        // claims.put("firstName", account.getFirstName());
+        // claims.put("lastName", account.getLastName());
+        // claims.put("phone", account.getPhone());
+        // claims.put("address", account.getAddress());
+        // claims.put("city", account.getCity());
+        // claims.put("state", account.getState());
+        // claims.put("zip", account.getZip());
+        // claims.put("dateOfBirth", account.getDateOfBirth());
+        // claims.put("accountType", account.getAccountType());
+
         return createToken(claims, account.getEmail());
     }
 

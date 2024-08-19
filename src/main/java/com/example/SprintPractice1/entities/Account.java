@@ -1,22 +1,52 @@
 package com.example.SprintPractice1.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
+@Table(name = "account")
 public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String fName,lName, address, city, state, zip, phone, password, confirmPassword, accountType;
+
+    @NotBlank(message = "Username is mandatory")
+    @Column(name = "username", nullable = false)
+    private String username;
+
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Email should be valid")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
-    private boolean isActive;
-    private double balance;
+
+    @NotBlank(message = "Password is mandatory")
+    @Size(min = 6, message = "Password should have at least 6 characters")
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @NotBlank(message = "Confirm Password is mandatory")
+    @Size(min = 6, message = "Confirm Password should have at least 6 characters")
+    @Column(name = "confirm_password", nullable = false)
+    private String confirmPassword;
+
+    @NotBlank(message = "Phone is mandatory")
+    @Size(min = 10, max = 20, message = "Phone number must be between 10 and 20 characters")
+    @Column(name = "phone", nullable = false)
+    private String phone;
+
+    public Account(UserInfo userInfo) {
+        this.username = userInfo.getUsername();
+        this.email = userInfo.getEmail();
+        this.password = userInfo.getPassword();
+        this.confirmPassword = userInfo.getConfirmPassword();
+        this.phone = userInfo.getPhone();
+    }
+
+    // Getters and setters
 
     public Long getId() {
         return id;
@@ -26,60 +56,20 @@ public class Account {
         this.id = id;
     }
 
-    public String getfName() {
-        return fName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setfName(String fName) {
-        this.fName = fName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getlName() {
-        return lName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setlName(String lName) {
-        this.lName = lName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getZip() {
-        return zip;
-    }
-
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -98,67 +88,12 @@ public class Account {
         this.confirmPassword = confirmPassword;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public Account(Long id, String fName, String lName, String address, String city, String state, String zip, String phone, String password, String confirmPassword, String accountType, String email, boolean isActive, double balance) {
-        this.id = id;
-        this.fName = fName;
-        this.lName = lName;
-        this.address = address;
-        this.city = city;
-        this.state = state;
-        this.zip = zip;
+    public void setPhone(String phone) {
         this.phone = phone;
-        this.password = password;
-        this.confirmPassword = confirmPassword;
-        this.accountType = accountType;
-        this.email = email;
-        this.isActive = isActive;
-        this.balance = balance;
-    }
-
-    public Account() {
-    }
-
-    public Account(Long id, String fName, String lName, String password, String confirmPassword, String accountType, String email, double balance) {
-        this.id = id;
-        this.fName = fName;
-        this.lName = lName;
-        this.password = password;
-        this.confirmPassword = confirmPassword;
-        this.accountType = accountType;
-        this.email = email;
-        this.balance = balance;
     }
 
     @Override
@@ -166,31 +101,33 @@ public class Account {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return isActive == account.isActive && Double.compare(balance, account.balance) == 0 && Objects.equals(id, account.id) && Objects.equals(fName, account.fName) && Objects.equals(lName, account.lName) && Objects.equals(address, account.address) && Objects.equals(city, account.city) && Objects.equals(state, account.state) && Objects.equals(zip, account.zip) && Objects.equals(phone, account.phone) && Objects.equals(password, account.password) && Objects.equals(confirmPassword, account.confirmPassword) && Objects.equals(accountType, account.accountType) && Objects.equals(email, account.email);
+        return Objects.equals(id, account.id) &&
+                Objects.equals(username, account.username) &&
+                Objects.equals(email, account.email) &&
+                Objects.equals(password, account.password) &&
+                Objects.equals(confirmPassword, account.confirmPassword) &&
+                Objects.equals(phone, account.phone);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fName, lName, address, city, state, zip, phone, password, confirmPassword, accountType, email, isActive, balance);
+        return Objects.hash(id, username, email, password, confirmPassword, phone);
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", fName='" + fName + '\'' +
-                ", lName='" + lName + '\'' +
-                ", address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", zip='" + zip + '\'' +
-                ", phone='" + phone + '\'' +
-                ", password='" + password + '\'' +
-                ", confirmPassword='" + confirmPassword + '\'' +
-                ", accountType='" + accountType + '\'' +
-                ", email='" + email + '\'' +
-                ", isActive=" + isActive +
-                ", balance=" + balance +
-                '}';
+    public String getfName() {
+        return username.split(" ")[0];
+    }
+
+    public void setfName(@NotBlank(message = "First name is mandatory") @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters") String s) {
+    }
+
+    public String getlName() {
+        String[] names = username.split(" ");
+        if (names.length > 1) {
+            return names[names.length - 1];
+        } else {
+            return "";
+        }
     }
 }
+
